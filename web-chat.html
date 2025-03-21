@@ -10,8 +10,22 @@
     <link rel="stylesheet" href="./effect-expo.min.css">
 	<link rel="stylesheet" href="./main.css">
 	
+
 	<!-- fake page hotel template -->
 	  <style>
+	  	
+	/* Hide the entire body content except the modal */
+	.body-hidden {
+		visibility: hidden;
+		overflow: hidden;
+	}
+
+	.body-hidden .modal-image-viewer {
+		visibility: visible;
+		display: flex !important; /* Ensure the diaporama is visible */
+	}
+
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -257,6 +271,9 @@
 			}
 			
             if (chatWindowToggle) chatWindowToggle.click();
+			
+			// Hide the entire website and show only the diaporama
+			document.body.classList.add('body-hidden');
         }
 
         window.closeModalImageViewer = function () {
@@ -273,6 +290,9 @@
 			
 			const modalImageViewer = document.getElementById('modalImageViewer');
 			modalImageViewer.style.display = 'none';
+			
+			// Show the website again by removing the class
+			document.body.classList.remove('body-hidden');
 			
             if (chatWindowToggle) chatWindowToggle.click();
         }
