@@ -337,8 +337,9 @@
 
         document.addEventListener('click', function (event) {
 			const modalContainer = document.querySelector('.modal');
-			if (modalContainer && event.target === modalContainer) {
+			if (modalContainer && event.target === modalContainer && mouseDownTarget === modalContainer) {
 				closeModalImageViewer();
+				mouseDownTarget = null; // Reset mouseDownTarget to null
 			}
 		});
 
@@ -349,6 +350,12 @@
         });
 
         observer.observe(chatMessagesContainer, { childList: true, subtree: true });
+
+        let mouseDownTarget = null;
+
+        document.addEventListener('mousedown', function (event) {
+            mouseDownTarget = event.target;
+        });
 
    // Initialize Swiper only if it's not already initialized
    if (!swiper) {
