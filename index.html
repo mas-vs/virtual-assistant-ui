@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Assistant Demo</title>
+    <!-- Other CSS files for your main page -->
+
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/wwwroot/css/effect-expo.min.css" />
+    <link rel="stylesheet" href="/wwwroot/css/web-chat.css" />
+
+    <!-- fake page hotel template -->
+	  <style>
+	  	
+        /* Hide the entire body content except the modal */
+        .body-hidden {
+            visibility: hidden;
+            overflow: hidden;
+        }
+    
+        .body-hidden .modal-image-viewer {
+            visibility: visible;
+            display: flex !important; /* Ensure the diaporama is visible */
+        }
+    
+    
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+            }
+    
+            header {
+                background-color: #333;
+                color: white;
+                padding: 20px;
+                text-align: center;
+            }
+    
+            .gallery {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 15px;
+                padding: 20px;
+            }
+    
+            .gallery img {
+                width: 100%;
+                height: auto;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+    
+            .room-title {
+                text-align: center;
+                font-size: 1.2em;
+                margin-top: 10px;
+            }
+    
+            footer {
+                text-align: center;
+                padding: 10px;
+                background-color: #333;
+                color: white;
+                margin-top: 20px;
+            }
+        </style>
+</head>
+
+<body>
+    
+    <header>
+        <h1>Mock Hotel</h1>
+        <p>Experience luxury and comfort at Mock Hotel.</p>
+    </header>
+
+    <section class="gallery">
+        <div>
+            <img src="https://www.lujohotel.com/assets/new-photos/accommodation/laguna-duplex-family-suite/laguna-duplex-family-suite-01.jpg"
+                alt="Laguna Duplex Family Suite 01">
+            <div class="room-title">Laguna Duplex Family Suite 01</div>
+        </div>
+        <div>
+            <img src="https://www.lujohotel.com/assets/new-photos/accommodation/laguna-duplex-family-suite/laguna-duplex-family-suite-02.jpg"
+                alt="Laguna Duplex Family Suite 02">
+            <div class="room-title">Laguna Duplex Family Suite 02</div>
+        </div>
+        <div>
+            <img src="https://www.lujohotel.com/assets/new-photos/accommodation/laguna-duplex-family-suite/laguna-duplex-family-suite-03.jpg"
+                alt="Laguna Duplex Family Suite 03">
+            <div class="room-title">Laguna Duplex Family Suite 03</div>
+        </div>
+        <div>
+            <img src="https://www.lujohotel.com/assets/new-photos/accommodation/laguna-duplex-family-suite/laguna-duplex-family-suite-04.jpg"
+                alt="Laguna Duplex Family Suite 04">
+            <div class="room-title">Laguna Duplex Family Suite 04</div>
+        </div>
+        <div>
+            <img src="https://www.lujohotel.com/assets/new-photos/accommodation/laguna-duplex-family-suite/laguna-duplex-family-suite-05.jpg"
+                alt="Laguna Duplex Family Suite 05">
+            <div class="room-title">Laguna Duplex Family Suite 05</div>
+        </div>
+        <div>
+            <img src="https://www.lujohotel.com/assets/rooms/floor-plans/Laguna_Duplex_Family_Suite_Floor1.jpg"
+                alt="Laguna Duplex Family Suite Floor Plan 1">
+            <div class="room-title">Laguna Duplex Family Suite Floor Plan 1</div>
+        </div>
+        <div>
+            <img src="https://www.lujohotel.com/assets/rooms/floor-plans/Laguna_Duplex_Family_Suite_Floor2.jpg"
+                alt="Laguna Duplex Family Suite Floor Plan 2">
+            <div class="room-title">Laguna Duplex Family Suite Floor Plan 2</div>
+        </div>
+    </section>
+    <footer>
+        <p>Mock Hotel &copy; 2023. All Rights Reserved.</p>
+    </footer>
+
+
+    <!-- Embed the Chat Widget using an iframe
+    <iframe id="chat-iframe" src="/chat-widget.html"
+        style="position: fixed; bottom: 20px; right: 20px; width: 320px; height: 480px; border: none; z-index: 1000;">
+    </iframe> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="/wwwroot/js/effect-expo.min.js"></script>
+    <script type="module" src="/wwwroot/js/web-chat.mjs"></script>
+</body>
+
+</html>
