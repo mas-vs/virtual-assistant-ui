@@ -46,10 +46,33 @@ createChat({
 	allowedFilesMimeTypes: '.pdf;.doc;.docs;.txt;.png;.jpg;.jpeg',
 });
 
+
+// Add this function to handle wheel events
+function handleWheel(event) {
+    if (!isGalleryOpen || !swiper) return;
+    
+    event.preventDefault();
+
+    const now = Date.now();
+    if (now - lastWheelTimestamp < 50) return; // Debounce wheel events
+    lastWheelTimestamp = now;
+
+    if (event.deltaY > 0) {
+        swiper.slideNext();
+    } else if (event.deltaY < 0) {
+        swiper.slidePrev();
+    }
+}
+
 let currentImageIndex = 0;
 let images = [];
 let swiper;
 
+
+	// Add these variables at the top of your file
+	console.log("isGalleryOpen = false");
+let isGalleryOpen = false;
+let lastWheelTimestamp = 0;
 
 document.addEventListener('click', function (event) {
 	if (event.target.tagName === 'IMG' && event.target.closest('.chat-message')) {
@@ -94,6 +117,9 @@ window.openModalImageViewer = function (index) {
 		swiperWrapper.appendChild(slide);
 	});
 
+	isGalleryOpen = true;
+    document.body.style.overflow = 'hidden'; // Prevent body scrolling
+    window.addEventListener('wheel', handleWheel, { passive: false });
 
 	if (swiper) {
 		swiper.update();
@@ -111,6 +137,10 @@ window.closeModalImageViewer = function () {
 	if (swiperWrapper) {
 		swiperWrapper.innerHTML = ''; // Clear existing slides
 	}
+
+	isGalleryOpen = false;
+    document.body.style.overflow = ''; // Restore body scrolling
+    window.removeEventListener('wheel', handleWheel);
 
 	const modalImageViewer = document.getElementById('modalImageViewer');
 	modalImageViewer.style.display = 'none';
@@ -163,7 +193,9 @@ if (!swiper) {
 	// dark theme
 	document.body.classList.toggle('content-visible')
 
+
 	SwitchToHorizontalView();
+
 
 	// Ensure buttons are hidden on small screens
 	const mediaQuery = window.matchMedia('(max-width: 768px)');
@@ -183,6 +215,7 @@ if (!swiper) {
 	}
 	mediaQuery.addListener(handleMediaChange);
 	handleMediaChange(mediaQuery);
+
 
 	function SwitchToVerticalView() {
 		if (swiper.params.direction === 'horizontal') {
