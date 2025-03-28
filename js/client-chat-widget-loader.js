@@ -1,4 +1,4 @@
-// chat-widget-loader.js
+// client-chat-widget-loader.js
 (function () {
   if (document.getElementById('chat-widget-root')) return; // prevent duplicates
 
@@ -31,16 +31,35 @@
   window.ChatWidgetConfig = { clientId, project, webhookurl };
 
   // Inject scripts (synchronously or as module)
-  const script = document.createElement('script');
-  script.type = 'module';
-  script.src = '/js/web-chat.mjs';
-  document.body.appendChild(script);
-  // Add Swiper and any other non-module scripts
+
+  // 1. Load Swiper JS
   const swiperScript = document.createElement('script');
   swiperScript.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
+
+  // 2. After Swiper loads, load Effect JS
+  swiperScript.onload = () => {
+    const effectScript = document.createElement('script');
+    effectScript.src = '/js/effect-expo.min.js';
+
+    effectScript.onload = () => {
+      // 3. After Effect loads, load Swiper-to-Chat (as a module)
+      const swiperToChat = document.createElement('script');
+      swiperToChat.type = 'module';
+      swiperToChat.src = '/js/swiper-to-chat.mjs';
+      document.body.appendChild(swiperToChat);
+
+      swiperToChat.onload = () => {
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = '/js/client-web-chat.mjs';
+        document.body.appendChild(script);
+      }
+    };
+
+    document.body.appendChild(effectScript);
+  };
+
   document.body.appendChild(swiperScript);
 
-  const effectScript = document.createElement('script');
-  effectScript.src = '/js/effect-expo.min.js';
-  document.body.appendChild(effectScript);
+
 })();

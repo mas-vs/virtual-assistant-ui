@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Assistant Demo</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/@@n8n/chat/dist/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="http://localhost:8080/css/effect-expo.min.css">
+    <link rel="stylesheet" href="http://localhost:8080/css/chat-widget.css">
+</head>
+
+<body>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script type="module" src="http://localhost:8080/js/swiper-to-chat.mjs"></script>
+
+    <!-- to chat with n8n sevrer use wehhook url 'https://valuespace.app.n8n.cloud/webhook/b0cd5e28-a448-47de-b150-9d244d37e270/chat'> -->
+
+    <script>
+        createChat({
+            webhookUrl: 'https://localhost:7047/api/chat/',
+            mode: 'fullscreen',
+            metadata: {
+                client_id: 'ValueSpace server',
+                project: 'VesperWorld',
+            },
+            showWelcomeScreen: false,
+            initialMessages: [
+                'Hi there!',
+                'What web site do you want to visit?',
+            ],
+            i18n: {
+                en: {
+                    title: 'Hi there! \uD83D\uDC4B',
+                    subtitle: "Start a chat. We're here to help you 24/7.",
+                    footer: 'Checking bot compliance rules <link here...>',
+                    getStarted: 'New Conversation',
+                    inputPlaceholder: 'Type your question..',
+                },
+            },
+            allowFileUploads: true,
+            allowedFilesMimeTypes: '.pdf;.doc;.docs;.txt;.png;.jpg;.jpeg',
+        });
+
+        // After chat widget is initialized
+        document.dispatchEvent(new CustomEvent('chatWidgetReady'));
+    </script>
+</body>
+</html>
