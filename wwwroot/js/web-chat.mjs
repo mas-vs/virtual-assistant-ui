@@ -1,11 +1,22 @@
 import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
+console.log(`%cValueSpace.ai\n%cAI-powered hotel chatbot, \u00A9 ${(new Date).getFullYear()} ValueSpace.ai\n visit https://valuespace.ai`, "color:#c93656;font-weight:bolder;font-family:Montserrat,sans-serif;font-size:40px;text-shadow:-1px 0 #1b2f5d,0 1px #1b2f5d,1px 0 #1b2f5d,0 -1px #1b2f5d;", "font-weight:bolder;");
+
+window.addEventListener('DOMContentLoaded', () => {
+  const styles = getComputedStyle(document.documentElement);
+  const height = styles.getPropertyValue('--chat--window--height').trim() || '600px';
+  const width = styles.getPropertyValue('--chat--window--width').trim() || '400px';
+
+  parent.postMessage({
+    type: 'chat-set-size',
+    height,
+    width
+  }, '*');
+});
 
 // Function to dynamically inject the modalImageViewer widget
 function injectModalViewer() {
-	console.log('injectModalViewer');
 	if (document.getElementById('modalImageViewer')) return; // Prevent duplicate injection
-	console.log('modalImageViewer found');
 	const modalHTML = `
 		<div class="modal" style="display: none;">
 			<div class="modal-image-viewer" id="modalImageViewer">
@@ -43,9 +54,6 @@ let mouseDownInsideModal = false;
 let mouseDownOutsideModal = false;
 
 const modalImageViewer = document.querySelector('.modal-image-viewer');
-if (modalImageViewer) {
-	// Removed event listener
-}
 
 const modalContainer = document.querySelector('.modal');
 if (modalContainer) {
@@ -64,51 +72,6 @@ if (modalContainer) {
 document.addEventListener('mouseup', () => {
 	mouseDownInsideModal = false;
 });
-
-function groupImages() {
-	const imageContainers = document.querySelectorAll('.chat-message-markdown ol');
-	imageContainers.forEach(container => {
-		const imageElements = container.querySelectorAll('li img');
-		if (imageElements.length >= 4) {
-			const imageGrid = document.createElement('div');
-			imageGrid.className = 'image-grid';
-
-			for (let i = 0; i < 4; i++) {
-				const imgWrapper = document.createElement('div');
-				if (i === 3 && imageElements.length > 4) {
-					imgWrapper.className = 'more-images';
-					imgWrapper.setAttribute('data-count', `+${imageElements.length - 3}`);
-				}
-				imgWrapper.appendChild(imageElements[i].cloneNode(true));
-				imageGrid.appendChild(imgWrapper);
-			}
-
-			container.innerHTML = '';
-			container.appendChild(imageGrid);
-
-			const hiddenImages = document.createElement('div');
-			hiddenImages.className = 'hidden-images';
-			for (let i = 4; i < imageElements.length; i++) {
-				hiddenImages.appendChild(imageElements[i].cloneNode(true));
-			}
-			container.appendChild(hiddenImages);
-		} else {
-			imageElements.forEach(img => {
-				if (!img.closest('.image-grid')) {
-					const altText = img.alt;
-					if (altText) {
-						const caption = document.createElement('div');
-						caption.className = 'image-caption';
-						caption.textContent = altText;
-						img.insertAdjacentElement('afterend', caption);
-					}
-				}
-			});
-		}
-	});
-}
-
-console.log(`%cValueSpace.ai\n%cAI-powered hotel chatbot, \u00A9 ${(new Date).getFullYear()} ValueSpace.ai\n visit https://valuespace.ai`, "color:#c93656;font-weight:bolder;font-family:Montserrat,sans-serif;font-size:40px;text-shadow:-1px 0 #1b2f5d,0 1px #1b2f5d,1px 0 #1b2f5d,0 -1px #1b2f5d;", "font-weight:bolder;");
 
 createChat({
 	webhookUrl: 'https://valuespace.app.n8n.cloud/webhook/b0cd5e28-a448-47de-b150-9d244d37e270/chat',
@@ -335,5 +298,49 @@ if (!swiper) {
 			swiper.changeDirection();
 			swiper.update();
 		}
+	}
+
+
+	function groupImages() {
+		const imageContainers = document.querySelectorAll('.chat-message-markdown ol');
+		imageContainers.forEach(container => {
+			const imageElements = container.querySelectorAll('li img');
+			if (imageElements.length >= 4) {
+				const imageGrid = document.createElement('div');
+				imageGrid.className = 'image-grid';
+
+				for (let i = 0; i < 4; i++) {
+					const imgWrapper = document.createElement('div');
+					if (i === 3 && imageElements.length > 4) {
+						imgWrapper.className = 'more-images';
+						imgWrapper.setAttribute('data-count', `+${imageElements.length - 3}`);
+					}
+					imgWrapper.appendChild(imageElements[i].cloneNode(true));
+					imageGrid.appendChild(imgWrapper);
+				}
+
+				container.innerHTML = '';
+				container.appendChild(imageGrid);
+
+				const hiddenImages = document.createElement('div');
+				hiddenImages.className = 'hidden-images';
+				for (let i = 4; i < imageElements.length; i++) {
+					hiddenImages.appendChild(imageElements[i].cloneNode(true));
+				}
+				container.appendChild(hiddenImages);
+			} else {
+				imageElements.forEach(img => {
+					if (!img.closest('.image-grid')) {
+						const altText = img.alt;
+						if (altText) {
+							const caption = document.createElement('div');
+							caption.className = 'image-caption';
+							caption.textContent = altText;
+							img.insertAdjacentElement('afterend', caption);
+						}
+					}
+				});
+			}
+		});
 	}
 };	

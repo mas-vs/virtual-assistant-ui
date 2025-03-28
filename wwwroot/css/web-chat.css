@@ -5,6 +5,8 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/*
 body {
   background: #0f0f11;
   color: #fff;
@@ -18,7 +20,7 @@ body {
     background: #fff;
   }
 }
-
+*/
 #modalImageViewer {
   height: 100%;
   display: flex;
@@ -179,7 +181,16 @@ body {
 		--chat--color-dark: #101330;
 		--chat--color-light: #f2f4f8;
 		--chat--color-medium: #d2d4d9;
+    --chat--spacing:1em;
+    --chat--toggle--size:65px;
+    --chat--subtitle--line-height:0px;
+    --chat--window--width: 400px;
+	  --chat--window--height: 800px;
 	}
+
+  .chat-layout .chat-header {
+    gap:0em;
+  }
 
 	.chat-body {
 		background-color: var(--chat--color-white);
@@ -281,11 +292,7 @@ body {
 		margin-top: 5px;
 		font-size: 0.9em;
 	}
-	
-	.n8n-chat {
-		padding-bottom: 50px;
-	}
-	
+
 	.swiper-button-next,
 	.swiper-button-prev {
 		color: white;
@@ -367,3 +374,10 @@ body {
 .modal-footer button {
   margin-left: 10px;
 }
+
+/*
+	
+.chat-window-wrapper {
+  position: static;
+}
+*/
