@@ -8,13 +8,6 @@ function injectModalViewer() {
 	const modalHTML = `
 		<div class="modal" style="display: none;">
 			<div class="modal-image-viewer" id="modalImageViewer">
-				<div class="demo-nav">
-					<button class="demo-nav-content">
-						<svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
-							<path d="M120-240v-80h480v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
-						</svg>
-					</button>
-				</div>
 				<div class="swiper">
 					<div class="swiper-wrapper" id="swiperWrapper"></div>
 					<div class="swiper-button-next"></div>
@@ -24,33 +17,12 @@ function injectModalViewer() {
 			</div>
 		</div>
 	`;
+	console.log("injectModalViewer");
 
 	document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 
-
-let mouseDownInsideModal = false;
-let mouseDownOutsideModal = false;
-
-const modalImageViewer = document.querySelector('.modal-image-viewer');
-
-const modalContainer = document.querySelector('.modal');
-if (modalContainer) {
-	modalContainer.addEventListener('mousedown', () => {
-		mouseDownOutsideModal = true;
-	});
-
-	modalContainer.addEventListener('mouseup', () => {
-		if (mouseDownOutsideModal) {
-			closeModalImageViewer();
-			mouseDownOutsideModal = false;
-		}
-	});
-}
-
-document.addEventListener('mouseup', () => {
-	mouseDownInsideModal = false;
-});
+console.log("createChat");
 
 createChat({
 	webhookUrl: 'https://valuespace.app.n8n.cloud/webhook/b0cd5e28-a448-47de-b150-9d244d37e270/chat',
@@ -94,7 +66,6 @@ injectModalViewer();
 
 
 window.openModalImageViewer = function (index) {
-	console.log("openModalImageViewer");
 	currentImageIndex = index;
 	const swiperWrapper = document.getElementById('swiperWrapper');
 	swiperWrapper.innerHTML = ''; // Clear existing slides
@@ -130,6 +101,7 @@ window.openModalImageViewer = function (index) {
 	}
 
 	const chatWindowToggle = document.querySelector('.chat-window-toggle');
+	if (chatWindowToggle) chatWindowToggle.click();
 }
 
 window.closeModalImageViewer = function () {
@@ -187,9 +159,9 @@ if (!swiper) {
 	});
 
 	// light theme
-	document.body.classList.toggle('light')
+	//document.body.classList.toggle('light')
 	// dark theme
-	//document.body.classList.toggle('content-visible')
+	document.body.classList.toggle('content-visible')
 
 	SwitchToHorizontalView();
 
@@ -228,12 +200,11 @@ if (!swiper) {
 		}
 	}
 
-
-	document.addEventListener('click', function (event) {
+	document.addEventListener('mousedown', function (event) {
 		const modalContainer = document.querySelector('.modal');
-		if (modalContainer && event.target === modalContainer && mouseDownTarget === modalContainer) {
+		const clickedInsideSlide = event.target.closest('.swiper-expo');
+		if (modalContainer && (clickedInsideSlide || event.target === modalContainer)) {
 			closeModalImageViewer();
-			mouseDownTarget = null; // Reset mouseDownTarget to null
 		}
 	});
 
@@ -290,9 +261,3 @@ const observer = new MutationObserver(() => {
 });
 
 observer.observe(chatMessagesContainer, { childList: true, subtree: true });
-
-let mouseDownTarget = null;
-
-document.addEventListener('mousedown', function (event) {
-	mouseDownTarget = event.target;
-});
