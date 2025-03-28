@@ -142,6 +142,7 @@ window.openModalImageViewer = function (index) {
 	if (chatWindowToggle) chatWindowToggle.click();
 }
 
+
 window.closeModalImageViewer = function () {
 	const chatWindowToggle = document.querySelector('.chat-window-toggle');
 
@@ -162,8 +163,6 @@ window.closeModalImageViewer = function () {
 	if (chatWindowToggle) chatWindowToggle.click();
 }
 
-
-
 // Initialize Swiper only if it's not already initialized
 if (!swiper) {
 	swiper = new Swiper('.swiper', {
@@ -173,7 +172,7 @@ if (!swiper) {
 		// specify "expo" effect
 		effect: 'expo',
 		// "expo" effect mainly design to work with slidesPerView: 1.5
-		slidesPerView: 1.5,
+		slidesPerView: 1,
 		// "expo" effect parameters
 		expoEffect: {
 			// image scale multiplier, 1.125 is minimum
@@ -192,11 +191,25 @@ if (!swiper) {
 			prevEl: '.swiper-button-prev',
 		},
 		grabCursor: true,
-		spaceBetween: 16,
-		breakpoints: {
-			768: {
-				spaceBetween: 32,
+		spaceBetween: 0,
+		breakpoints: 
+			{
+			// When screen width is ≤ 1024px (tablet)
+			2048: {
+				slidesPerView: 1.5,
+				spaceBetween: 16,
+				rotate: 30,
 			},
+			768: {
+				slidesPerView: 1,
+				spaceBetween: 8,
+				rotate: 0,
+			},
+			480: {
+				slidesPerView: 1,
+				spaceBetween: 0,
+				rotate: 0,
+			}
 		},
 	});
 
@@ -214,14 +227,8 @@ if (!swiper) {
 	function handleMediaChange(e) {
 		const navButtons = document.querySelectorAll('.swiper-button-next, .swiper-button-prev');
 		if (e.matches) {
-			navButtons.forEach(button => {
-				button.style.display = 'none';
-			});
 			SwitchToVerticalView();
 		} else {
-			navButtons.forEach(button => {
-				button.style.display = 'flex';
-			});
 			SwitchToHorizontalView();
 		}
 	}
@@ -248,7 +255,9 @@ if (!swiper) {
 	document.addEventListener('mousedown', function (event) {
 		const modalContainer = document.querySelector('.modal');
 		const clickedInsideSlide = event.target.closest('.swiper-expo');
-		if (modalContainer && (clickedInsideSlide || event.target === modalContainer)) {
+		const swiperButtonNext = event.target.closest('.swiper-button-next');
+		const swiperButtonNPrev = event.target.closest('.swiper-button-prev');
+		if (modalContainer && ((clickedInsideSlide && !swiperButtonNext && !swiperButtonNPrev) || event.target === modalContainer)) {
 			closeModalImageViewer();
 		}
 	});
@@ -306,3 +315,26 @@ const observer = new MutationObserver(() => {
 });
 
 observer.observe(chatMessagesContainer, { childList: true, subtree: true });
+
+const chatWindow = document.querySelector('.chat-window');
+
+if (chatWindow) {
+  const observer = new MutationObserver(() => {
+    const isVisible = getComputedStyle(chatWindow).display !== 'none';
+
+    if (isVisible) {
+      const modal = document.querySelector('.modal');
+      if (isGalleryOpen) {
+        console.log('[Chat] Opened → Closing diaporama...');
+        closeModalImageViewer();
+		const chatWindowToggle = document.querySelector('.chat-window-toggle');
+		if (chatWindowToggle) chatWindowToggle.click();
+      }
+    }
+  });
+
+  observer.observe(chatWindow, {
+    attributes: true,
+    attributeFilter: ['style'],
+  });
+}

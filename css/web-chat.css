@@ -155,6 +155,11 @@ body {
   }
 }
 
+.swiper-expo.swiper-vertical {
+  padding-left:0px; 
+  padding-right:0px;
+}
+
 .swiper-slide .expo-image {
   user-select: none;
   /* Prevent text selection */
@@ -162,7 +167,7 @@ body {
 
 @media (max-width: 768px) {
   .modal-image-viewer {
-    width: 100%;
+    width: 100% !important; 
     height: 100%;
     max-width: none;
     max-height: none;
@@ -171,7 +176,8 @@ body {
 
   .swiper-button-next,
   .swiper-button-prev {
-    display: none;
+    display: none !important; /* ✅ Force override */
+    visibility: hidden !important; /* Optional: further fallback */
   }
 }
 
