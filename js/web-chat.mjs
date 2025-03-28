@@ -17,51 +17,64 @@ function injectModalViewer() {
 			</div>
 		</div>
 	`;
-	console.log("injectModalViewer");
 
 	document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 
-console.log("createChat");
 
-createChat({
-	webhookUrl: 'https://valuespace.app.n8n.cloud/webhook/b0cd5e28-a448-47de-b150-9d244d37e270/chat',
-	mode: 'window',
-	metadata: { project: 'vesperworld' },
-	showWelcomeScreen: false,
-	initialMessages: [
-		'Hi there! \uD83D\uDC4B',
-		'My name is Lujo. How can I assist you today?',
-	],
-	i18n: {
-		en: {
-			title: 'Hi there! \uD83D\uDC4B',
-			subtitle: "Start a chat. We're here to help you 24/7.",
-			footer: 'Checking bot compliance rules <link here...>',
-			getStarted: 'New Conversation',
-			inputPlaceholder: 'Type your question..',
+const config = window.ChatWidgetConfig || {};
+const { clientId, project, webhookurl } = config;
+
+if (!clientId || !project || !webhookurl) {
+	console.warn('[Chat Widget] Required parameters are missing. Aborting initialization.', {
+		clientId,
+		project,
+		webhookurl
+	});
+}
+else {
+	createChat({
+		webhookUrl: webhookurl,
+		mode: 'window',
+		metadata: { 
+			client_id: clientId,
+			project: project,
 		},
-	},
-	allowFileUploads: true,
-	allowedFilesMimeTypes: '.pdf;.doc;.docs;.txt;.png;.jpg;.jpeg',
-});
+		showWelcomeScreen: false,
+		initialMessages: [
+			'Hi there! \uD83D\uDC4B',
+			'My name is Lujo. How can I assist you today?',
+		],
+		i18n: {
+			en: {
+				title: 'Hi there! \uD83D\uDC4B',
+				subtitle: "Start a chat. We're here to help you 24/7.",
+				footer: 'Checking bot compliance rules <link here...>',
+				getStarted: 'New Conversation',
+				inputPlaceholder: 'Type your question..',
+			},
+		},
+		allowFileUploads: true,
+		allowedFilesMimeTypes: '.pdf;.doc;.docs;.txt;.png;.jpg;.jpeg',
+	});
+}
 
 
 // Add this function to handle wheel events
 function handleWheel(event) {
-    if (!isGalleryOpen || !swiper) return;
-    
-    event.preventDefault();
+	if (!isGalleryOpen || !swiper) return;
 
-    const now = Date.now();
-    if (now - lastWheelTimestamp < 50) return; // Debounce wheel events
-    lastWheelTimestamp = now;
+	event.preventDefault();
 
-    if (event.deltaY > 0) {
-        swiper.slideNext();
-    } else if (event.deltaY < 0) {
-        swiper.slidePrev();
-    }
+	const now = Date.now();
+	if (now - lastWheelTimestamp < 50) return; // Debounce wheel events
+	lastWheelTimestamp = now;
+
+	if (event.deltaY > 0) {
+		swiper.slideNext();
+	} else if (event.deltaY < 0) {
+		swiper.slidePrev();
+	}
 }
 
 let currentImageIndex = 0;
@@ -69,8 +82,7 @@ let images = [];
 let swiper;
 
 
-	// Add these variables at the top of your file
-	console.log("isGalleryOpen = false");
+// Add these variables at the top of your file
 let isGalleryOpen = false;
 let lastWheelTimestamp = 0;
 
@@ -118,8 +130,8 @@ window.openModalImageViewer = function (index) {
 	});
 
 	isGalleryOpen = true;
-    document.body.style.overflow = 'hidden'; // Prevent body scrolling
-    window.addEventListener('wheel', handleWheel, { passive: false });
+	document.body.style.overflow = 'hidden'; // Prevent body scrolling
+	window.addEventListener('wheel', handleWheel, { passive: false });
 
 	if (swiper) {
 		swiper.update();
@@ -139,8 +151,8 @@ window.closeModalImageViewer = function () {
 	}
 
 	isGalleryOpen = false;
-    document.body.style.overflow = ''; // Restore body scrolling
-    window.removeEventListener('wheel', handleWheel);
+	document.body.style.overflow = ''; // Restore body scrolling
+	window.removeEventListener('wheel', handleWheel);
 
 	const modalImageViewer = document.getElementById('modalImageViewer');
 	modalImageViewer.style.display = 'none';
