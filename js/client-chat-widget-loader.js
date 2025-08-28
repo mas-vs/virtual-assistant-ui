@@ -72,6 +72,14 @@
 
   // Inner content wrapper removed; iframe will attach directly to container
 
+  // Mobile-only close button inside the container
+  const closeBtn = document.createElement('button');
+  closeBtn.id = 'vs-chat-close';
+  closeBtn.type = 'button';
+  closeBtn.setAttribute('aria-label', 'Close chat');
+  closeBtn.innerHTML = '✕';
+  container.appendChild(closeBtn);
+
   document.body.appendChild(container);
   document.body.appendChild(launcher);
 
@@ -79,28 +87,91 @@
   let isOpen = false;
   let iframeEl = null;
   let isConnected = false;
+  // Explicit view mode state: 'full-screen-view' | 'container-view'
+  let viewMode = 'container-view';
+
+  // Media query to decide default mode (width-only to avoid touch-enabled desktops matching incorrectly)
+  const modeMQ = window.matchMedia('(max-width: 1024px)');
+
+  function isFullScreenMode() { return viewMode === 'full-screen-view'; }
+  function isContainerMode() { return viewMode === 'container-view'; }
+  function isOpenInFullScreen() { return isOpen && isFullScreenMode(); }
+  function isOpenInContainerView() { return isOpen && isContainerMode(); }
+
+  function applyModeClasses() {
+    container.classList.toggle('full-screen-view', isFullScreenMode());
+    container.classList.toggle('container-view', isContainerMode());
+  }
+
+  function updateViewMode() {
+    viewMode = modeMQ.matches ? 'full-screen-view' : 'container-view';
+    console.log('View mode:', viewMode);
+    applyModeClasses();
+    // Re-apply current open state so UI matches mode rules when resizing
+    setOpen(isOpen);
+  }
+
+  // Initialize mode and listen for changes
+  updateViewMode();
+  if (typeof modeMQ.addEventListener === 'function') {
+    modeMQ.addEventListener('change', updateViewMode);
+  } else if (typeof modeMQ.addListener === 'function') {
+    // Safari/older
+    modeMQ.addEventListener(updateViewMode);
+  }
+
+  // matchMedia drives viewMode; setOpen() applies the correct UI per current mode.
 
   function setOpen(open) {
     isOpen = !!open;
-    if (isOpen) {
-      container.style.display = 'flex';
-      // Raise the chat container above the launcher vertically
-      container.style.bottom = '100px'; // launcher: 60px height + 20px bottom + 20px gap
-      log('Chat opened');
-      const chatIcon = launcher.querySelector('.vs-chat-icon');
-      const closeIcon = launcher.querySelector('.vs-close-icon');
+    // Branch by mode first
+    if (isFullScreenMode()) {
+      if (isOpen) {
+        // Full-screen open
+        container.style.display = 'flex';
+        container.classList.add('is-open');
+        launcher.style.display = 'none';
+        log('Chat opened (full-screen-view)');
+      } else {
+        // Full-screen closed
+        container.style.display = 'none';
+        container.classList.remove('is-open');
+        launcher.style.display = 'flex';
+        log('Chat closed (full-screen-view)');
+      }
+    } else {
+      if (isOpen) {
+        // Container open
+        container.style.display = 'flex';
+        container.classList.add('is-open');
+        launcher.style.display = 'flex';
+        log('Chat opened (container-view)');
+      } else {
+        // Container closed
+        container.style.display = 'none';
+        container.classList.remove('is-open');
+        launcher.style.display = 'flex';
+        log('Chat closed (container-view)');
+      }
+    }
+
+    // Toggle launcher icons consistently
+    const chatIcon = launcher.querySelector('.vs-chat-icon');
+    const closeIcon = launcher.querySelector('.vs-close-icon');
+    if (isOpen && isContainerMode()) {
+      // In container mode when open, show the close glyph in launcher
       if (chatIcon) chatIcon.style.display = 'none';
       if (closeIcon) closeIcon.style.display = 'inline-block';
+      launcher.setAttribute('aria-label', 'Close chat');
     } else {
-      container.style.display = 'none';
-      container.style.bottom = '20px';
-      log('Chat closed');
-      const chatIcon = launcher.querySelector('.vs-chat-icon');
-      const closeIcon = launcher.querySelector('.vs-close-icon');
       if (chatIcon) chatIcon.style.display = 'inline-block';
       if (closeIcon) closeIcon.style.display = 'none';
       launcher.setAttribute('aria-label', 'Open chat');
-      launcher.focus();
+    }
+
+    // Focus the launcher only when closing
+    if (!isOpen) {
+      try { launcher.focus(); } catch (_) { }
     }
   }
 
@@ -145,6 +216,12 @@
     toggle();
   });
 
+  closeBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    log('Close button clicked');
+    setOpen(false);
+  });
+
   // Close on outside click
   document.addEventListener('click', function (event) {
     if (!isOpen) return;
@@ -163,7 +240,7 @@
     // As requested, no parent-origin restriction; still validate shape
     const data = event && event.data;
     if (!data || typeof data !== 'object') return;
-    log('Message received', { origin: event.origin, data });
+
     const isConnectedMsg = (data.type === 'chat.connected' || data.type === 'connected') && (data.source ? data.source === 'vs-chat' : true);
     if (isConnectedMsg) {
       isConnected = true;
