@@ -80,6 +80,14 @@
   closeBtn.innerHTML = '✕';
   container.appendChild(closeBtn);
 
+  // Full-screen button (shown only in container mode)
+  const fullscreenBtn = document.createElement('button');
+  fullscreenBtn.id = 'vs-chat-fullscreen';
+  fullscreenBtn.type = 'button';
+  fullscreenBtn.setAttribute('aria-label', 'Enter full screen');
+  fullscreenBtn.innerHTML = '⛶'; // maximize corners icon
+  container.appendChild(fullscreenBtn);
+
   document.body.appendChild(container);
   document.body.appendChild(launcher);
 
@@ -89,6 +97,8 @@
   let isConnected = false;
   // Explicit view mode state: 'full-screen-view' | 'container-view'
   let viewMode = 'container-view';
+  // User override: force full-screen regardless of viewport until closed
+  let userForcedFullScreen = false;
 
   // Media query to decide default mode (width-only to avoid touch-enabled desktops matching incorrectly)
   const modeMQ = window.matchMedia('(max-width: 1024px)');
@@ -104,8 +114,11 @@
   }
 
   function updateViewMode() {
-    viewMode = modeMQ.matches ? 'full-screen-view' : 'container-view';
-    console.log('View mode:', viewMode);
+    if (userForcedFullScreen) {
+      viewMode = 'full-screen-view';
+    } else {
+      viewMode = modeMQ.matches ? 'full-screen-view' : 'container-view';
+    }
     applyModeClasses();
     // Re-apply current open state so UI matches mode rules when resizing
     setOpen(isOpen);
@@ -138,6 +151,11 @@
         container.classList.remove('is-open');
         launcher.style.display = 'flex';
         log('Chat closed (full-screen-view)');
+        // Clear manual override on close
+        userForcedFullScreen = false;
+        // Recompute view mode from media query immediately so next open uses container on large screens
+        viewMode = modeMQ.matches ? 'full-screen-view' : 'container-view';
+        applyModeClasses();
       }
     } else {
       if (isOpen) {
@@ -220,6 +238,15 @@
     e.preventDefault();
     log('Close button clicked');
     setOpen(false);
+  });
+
+  fullscreenBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    log('Fullscreen button clicked');
+    userForcedFullScreen = true;
+    viewMode = 'full-screen-view';
+    applyModeClasses();
+    setOpen(true);
   });
 
   // Close on outside click
