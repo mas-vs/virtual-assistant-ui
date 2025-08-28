@@ -1,426 +1,110 @@
-html,
-body {
-  position: relative;
-  height: 100%;
-  margin: 0;
-  padding: 0;
+/**
+ * ValueSpace Widget CSS
+ */
+
+#vs-chat-container {
+  position: fixed;
+  z-index: 2147483001;
+  /* above launcher */
+  overflow: hidden;
+  transition: width 0.3s ease, height 0.3s ease;
+  box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
+  border-radius: 16px;
+  background-color: #ffffff;
+  /* default placement and size (desktop) */
+  bottom: 20px;
+  right: 20px;
+  width: 450px;
+  height: 800px;
 }
 
-/*
-body {
-  background: #0f0f11;
-  color: #fff;
-  line-height: 1.5;
-  font-family:
-    -apple-system, system-ui, 'Helvetica Neue', Helvetica, Arial, 'Segoe UI',
-    Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  &.light {
-    background: #fff;
-  }
-}
-*/
-#modalImageViewer {
-  height: 100%;
+/* #vs-chat-content removed: iframe attaches directly to #vs-chat-container */
+
+#vs-chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  min-width: 60px;
+  height: 60px;
+  padding: 0 16px;
+  border-radius: 9999px;
+  /* pill */
+  background-color: #0073aa;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 2147483000;
+  /* below container */
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.demo-nav {
-  width: 100%;
-  height: 48px;
-  flex-shrink: 0;
-  background: #222;
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  color: #fff;
   gap: 8px;
-  box-sizing: border-box;
-  padding: 8px 16px;
-  z-index: 10;
-  font-family: monospace;
-  font-size: 12px;
-
-  button,
-  label {
-    padding: 0 8px;
-    border-radius: 32px;
-    height: 100%;
-    font-size: 12px;
-    font-family: monospace;
-    appearance: none;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin: 0;
-    border: 0;
-    outline: 0;
-    box-shadow: none;
-    background-color: transparent;
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition-duration: 100ms;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-
-    &.active {
-      background: #114df1;
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    &:not(.active):hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-  }
-
-  .demo-nav-segmented {
-    display: flex;
-    align-items: center;
-
-    button {
-      width: 96px;
-      padding: 0;
-
-      &:first-child {
-        border-radius: 32px 0 0 32px;
-        border-right: none;
-      }
-
-      &:nth-child(2) {
-        border-radius: 0 32px 32px 0;
-      }
-    }
-  }
-
-  label input {
-    display: none;
-  }
+  transition: transform 0.2s ease;
+  font-size: 16px;
+  /* label size */
 }
 
-:root {
-  --expo-image-border-radius: 16px;
+#vs-chat-button:hover {
+  transform: scale(1.05);
 }
 
-@media (min-width: 768px) {
-  :root {
-    --expo-image-border-radius: 32px;
-  }
+#vs-chat-button:active {
+  transform: scale(0.95);
 }
 
-.swiper {
-  flex-grow: 1;
-  max-width: 100%;
+#vs-widget-iframe {
+  border: none;
   width: 100%;
   height: 100%;
+  border-radius: 16px;
 }
 
-.swiper-horizontal {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  margin: auto 0;
+.vs-chat-icon,
+.vs-close-icon {
+  font-size: 20px;
+  line-height: 1;
 }
 
-.swiper-vertical {
-  height: 100%;
-  aspect-ratio: 9 / 16;
+/* Position variants */
+.vs-position-bottom-right #vs-chat-container {
+  bottom: 20px;
+  right: 20px;
 }
 
-.expo-content {
-  padding: 16px;
-  font-weight: bold;
-  line-height: 1.1;
-  text-wrap-style: balance;
-  display: flex;
-  align-items: end;
-  box-sizing: border-box;
-  color: #fff;
-  font-size: 2vw;
-  visibility: hidden;
-
-  body.content-visible & {
-    visibility: visible;
-  }
-
-  @media (min-width: 640px) {
-    padding: 32px;
-  }
-
-  .swiper-vertical & {
-    font-size: 4.5vh;
-  }
+.vs-position-bottom-left #vs-chat-container {
+  bottom: 20px;
+  left: 20px;
 }
 
-.swiper-expo.swiper-vertical {
-  padding-left:0px; 
-  padding-right:0px;
+.vs-position-top-right #vs-chat-container {
+  top: 20px;
+  right: 20px;
 }
 
-.swiper-slide .expo-image {
-  user-select: none;
-  /* Prevent text selection */
+.vs-position-top-left #vs-chat-container {
+  top: 20px;
+  left: 20px;
 }
 
-@media (max-width: 768px) {
-  .modal-image-viewer {
-    width: 100% !important; 
-    height: 100%;
-    max-width: none;
-    max-height: none;
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  #vs-chat-container {
+    width: 100% !important;
+    height: 100% !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    top: 0 !important;
     border-radius: 0;
   }
 
-  .swiper-button-next,
-  .swiper-button-prev {
-    display: none !important; /* ✅ Force override */
-    visibility: hidden !important; /* Optional: further fallback */
+  #vs-widget-iframe {
+    border-radius: 0;
+  }
+
+  #vs-chat-button {
+    bottom: 30px;
+    right: 30px;
   }
 }
-
-.diapo-close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 44px;
-  height: 44px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease;
-  z-index: 1000;
-  /* Ensure it stays above other elements */
-}
-
-
-.diapo-close-button:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-}
-
-:root {
-  --chat--color-primary: #e74266;
-  --chat--color-secondary: #20b69e;
-  --chat--color-white: #ffffff;
-  --chat--color-dark: #101330;
-  --chat--color-light: #f2f4f8;
-  --chat--color-medium: #d2d4d9;
-  --chat--spacing: 1em;
-  --chat--toggle--size: 65px;
-  --chat--subtitle--line-height: 0px;
-  --chat--window--width: 400px;
-  --chat--window--height: 800px;
-}
-
-.chat-layout .chat-header {
-  gap: 0em;
-}
-
-.chat-body {
-  background-color: var(--chat--color-white);
-  position: relative;
-}
-
-.chat-header {
-  background-color: var(--chat--color-dark);
-  color: var(--chat--color-light);
-}
-
-.chat-message-from-bot {
-  background-color: var(--chat--color-white);
-  color: var(--chat--color-dark);
-}
-
-.chat-message-from-user {
-  background-color: var(--chat--color-secondary);
-  color: var(--chat--color-white);
-}
-
-.chat-toggle {
-  background-color: var(--chat--color-primary);
-  color: var(--chat--color-white);
-}
-
-.chat-body .chat-message img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  border: 2px solid var(--chat--color-medium);
-  padding: 5px;
-  background-color: var(--chat--color-light);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
-}
-
-.chat-message-markdown ol {
-  padding: 0;
-  list-style: none;
-}
-
-.chat-message-markdown ol li {
-  margin: 5px 0;
-}
-
-.chat-message-markdown .image-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 5px;
-}
-
-.chat-message-markdown .image-grid img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
-}
-
-.chat-message-markdown .image-grid .more-images {
-  position: relative;
-  background-color: rgb(0 0 0 / 80%);
-  color: var(--chat--color-dark);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.5em;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-}
-
-.chat-message-markdown .image-grid .more-images img {
-  opacity: 0.5;
-  border-radius: 10px;
-}
-
-.chat-message-markdown .image-grid .more-images::after {
-  content: attr(data-count);
-  position: absolute;
-  color: white;
-  font-size: 2em;
-  font-weight: bold;
-}
-
-.chat-message-markdown .hidden-images {
-  display: none;
-}
-
-.chat-message-markdown .image-caption {
-  background-color: var(--chat--color-light);
-  color: var(--chat--color-dark);
-  border-radius: 10px;
-  padding: 5px;
-  text-align: center;
-  margin-top: 5px;
-  font-size: 0.9em;
-}
-
-.swiper-button-next,
-.swiper-button-prev {
-  color: white;
-  font-size: 3em;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s;
-}
-
-.swiper-button-next {
-  right: 10px;
-  /* Adjust as needed */
-}
-
-.swiper-button-prev {
-  left: 10px;
-  /* Adjust as needed */
-}
-
-.swiper-button-next:hover,
-.swiper-button-prev:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-}
-
-/* Modal Styles */
-.modal {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-image-viewer {
-  width: 90%;
-  height: 90%;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-content {
-  padding: 0;
-  border-radius: 0;
-  box-shadow: none;
-  width: 100% !important;
-  height: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.modal-header .close {
-  cursor: pointer;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.modal-body {
-  margin-bottom: 20px;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.modal-footer button {
-  margin-left: 10px;
-}
-
-/*
-	
-.chat-window-wrapper {
-  position: static;
-}
-*/
