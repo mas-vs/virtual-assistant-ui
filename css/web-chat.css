@@ -38,6 +38,8 @@
   background-color: #0073aa;
   color: #ffffff;
   border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   z-index: 2147483000;
@@ -51,12 +53,24 @@
   /* label size */
 }
 
-#vs-chat-button:hover {
+#vs-chat-button:hover,
+/* Hover/active effects for in-container buttons, keep icon centered */
+#vs-chat-close:hover,
+#vs-chat-fullscreen:hover {
   transform: scale(1.05);
 }
 
-#vs-chat-button:active {
+#vs-chat-button:active,
+#vs-chat-close:active,
+#vs-chat-fullscreen:active {
   transform: scale(0.95);
+}
+
+/* Remove focus ring entirely for the toggle button (no keyboard usage needed) */
+#vs-chat-button:focus,
+#vs-chat-button:focus-visible {
+  outline: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 #vs-widget-iframe {
@@ -88,11 +102,16 @@
   background: rgba(0, 0, 0, 0.5);
   color: #fff;
   font-size: 18px;
-  line-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
   text-align: center;
   cursor: pointer;
   display: none;
   /* hidden by default, shown on small screens */
+  transform-origin: center;
+  transition: transform 0.2s ease;
 }
 
 /* Full-screen toggle button (container mode only) */
@@ -108,10 +127,15 @@
   background: rgba(0, 0, 0, 0.5);
   color: #fff;
   font-size: 18px;
-  line-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
   text-align: center;
   cursor: pointer;
   display: none;
+  transform-origin: center;
+  transition: transform 0.2s ease;
 }
 
 /* Position variants */
