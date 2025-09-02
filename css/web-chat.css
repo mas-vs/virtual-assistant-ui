@@ -53,8 +53,8 @@
   /* label size */
 }
 
-#vs-chat-button:hover,
 /* Hover/active effects for in-container buttons, keep icon centered */
+#vs-chat-button:hover,
 #vs-chat-close:hover,
 #vs-chat-fullscreen:hover {
   transform: scale(1.05);
@@ -81,6 +81,10 @@
   position: relative;
   z-index: 1;
   /* keep below in-container controls */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .vs-chat-icon,

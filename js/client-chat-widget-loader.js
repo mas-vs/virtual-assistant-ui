@@ -27,6 +27,12 @@
     return;
   }
 
+  console.log(
+    `%cWelcome to ValueSpace.ai 🚀\n%cAI-Powered Hospitality Assistant\n© ${(new Date).getFullYear()} ValueSpace.ai · https://valuespace.ai`,
+    "color:#c93656;font-weight:bolder;font-family:Montserrat,sans-serif;font-size:40px;text-shadow:-1px 0 #1b2f5d,0 1px #1b2f5d,1px 0 #1b2f5d,0 -1px #1b2f5d;",
+    "font-weight:bolder;"
+  );
+
   // Helper: get origin for preconnect
   let widgetOrigin;
   try { widgetOrigin = new URL(webhookurl).origin; } catch { widgetOrigin = null; }
@@ -207,7 +213,7 @@
     iframe.style.border = 'none';
     iframe.referrerPolicy = 'no-referrer-when-downgrade';
     iframe.style.overflow = 'auto';
-    iframe.sandbox = 'allow-same-origin allow-scripts allow-forms allow-popups allow-modals';
+    iframe.sandbox = 'allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-downloads';
     iframe.setAttribute('allow', 'microphone; camera; autoplay; clipboard-read; clipboard-write');
     iframe.src = url.toString();
     container.appendChild(iframe);
